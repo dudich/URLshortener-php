@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL shortener</title>
+    <script type="text/javascript">
+        function getXmlHttp() {
+            var xmlhttp;
+            try {
+                xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (E) {
+                    xmlhttp = false;
+                }
+            }
+            if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+                xmlhttp = new XMLHttpRequest();
+            }
+            return xmlhttp;
+        }
+        function getUrl() {
+            var url = document.getElementById('url').value;
+            var xmlhttp = getXmlHttp();
+            xmlhttp.open('GET', '/go.php?url=' + url, false);
+            xmlhttp.send(null);
+            if (xmlhttp.status == 200) {
+                if (xmlhttp.responseText != 'error') {
+                    document.getElementById('result').innerHTML = "<span><a href='" + xmlhttp.responseText + "'>" + xmlhttp.responseText + "</a></span>"
+                }
+                else {
+                    document.getElementById('result').innerHTML = "something went wrong"
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<form action="javascript:getUrl()">
+    <table style="width: 40%; margin: 50px auto">
+        <tbody>
+        <tr>
+            <th><label for='url'>Long URL</label></th>
+            <th>Short URL</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="url" name="url" id="url">
+                <input type="submit" value="Do!">
+            </td>
+            <td id="result"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>
