@@ -1,5 +1,5 @@
 <?php
-
+if (!defined("DIRECT_ACCESS")) die('No direct access');
 /**
  * PseudoCrypt by KevBurns (http://blog.kevburnsjr.com/php-unique-hash)
  * Reference/source: http://stackoverflow.com/a/1464155/933782

@@ -1,8 +1,14 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>URL shortener</title>
+    <meta charset="utf-8"/>
+    <link href="/testtask-styles.css" rel="stylesheet">
+    <title>XIAG test task</title>
+    <meta name="robots" content="noindex,nofollow"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=yes, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0"/>
+    <script type="text/javascript" src="/webtoolkit.base64.js"></script>
     <script type="text/javascript">
         function getXmlHttp() {
             var xmlhttp;
@@ -21,38 +27,72 @@
             return xmlhttp;
         }
         function getUrl() {
-            var url = document.getElementById('url').value;
+            var url = Base64.encode(document.getElementById('url').value);
             var xmlhttp = getXmlHttp();
             xmlhttp.open('GET', '/go.php?url=' + url, false);
             xmlhttp.send(null);
             if (xmlhttp.status == 200) {
-                if (xmlhttp.responseText != 'error') {
-                    document.getElementById('result').innerHTML = "<span><a href='" + xmlhttp.responseText + "'>" + xmlhttp.responseText + "</a></span>"
+                var resp = JSON.parse(xmlhttp.responseText);
+                if (resp.error) {
+                    document.getElementById('result').innerHTML = resp.error
                 }
                 else {
-                    document.getElementById('result').innerHTML = "something went wrong"
+                    document.getElementById('result').innerHTML = "<span><a href='" + resp.result + "'>" + resp.result + "</a></span>"
+
                 }
+            }
+            else {
+                document.getElementById('result').innerHTML = "something went wrong"
             }
         }
     </script>
 </head>
 <body>
-<form action="javascript:getUrl()">
-    <table style="width: 40%; margin: 50px auto">
-        <tbody>
-        <tr>
-            <th><label for='url'>Long URL</label></th>
-            <th>Short URL</th>
-        </tr>
-        <tr>
-            <td>
-                <input type="url" name="url" id="url">
-                <input type="submit" value="Do!">
-            </td>
-            <td id="result"></td>
-        </tr>
-        </tbody>
-    </table>
-</form>
+<div class="content">
+    <header>URL shortener</header>
+    <form action="javascript:getUrl()">
+        <table>
+            <tr>
+                <th>Long URL</th>
+                <th>Short URL</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="url" name="url" id="url">
+                    <input type="submit" value="Do!">
+                </td>
+                <td id=result></td>
+            </tr>
+        </table>
+    </form>
+    <footer>
+            <pre>
+            Using this HTML please implement the following:
+
+            1. Site-visitor (V) enters any original URL to the Input field, like
+            http://anydomain/any/path/etc;
+            2. V clicks submit button;
+            3. Page makes AJAX-request;
+            4. Short URL appears in Span element, like http://yourdomain/abCdE (don't use any
+               external APIs as goo.gl etc.);
+            5. V can copy short URL and repeat process with another link
+
+            Short URL should redirect to the original link in any browser from any place and keep
+            actuality forever, doesn't matter how many times application has been used after that.
+
+
+            Requirements:
+
+            1. Use PHP or Node.js;
+            2. Don't use any frameworks.
+
+            Expected result:
+
+            1. Source code;
+            2. System requirements and installation instructions on our platform, in English.
+            </pre>
+
+    </footer>
+</div>
 </body>
 </html>
